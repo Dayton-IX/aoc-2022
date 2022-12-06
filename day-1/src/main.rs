@@ -1,4 +1,4 @@
-use std::{convert, fs};
+use std::fs;
 
 fn main() {
     let elf_snack_bags: Vec<Vec<u32>> = read_snack_bags();

@@ -1,5 +1,7 @@
+use std::{convert, fs};
+
 fn main() {
-    let elf_snack_bags: Vec<Vec<u32>> = vec![vec![8, 2, 10], vec![9, 11, 14]];
+    let elf_snack_bags: Vec<Vec<u32>> = read_snack_bags();
     let mut elf_totals: Vec<u32> = vec![];
 
     for snack_bag in elf_snack_bags {
@@ -21,4 +23,27 @@ fn get_total_calories(calorie_list: Vec<u32>) -> u32 {
     }
 
     return total;
+}
+
+fn read_snack_bags() -> Vec<Vec<u32>> {
+    let file_content = fs::read_to_string("input.txt").expect("Should read the file");
+    println!("file_content: {}", file_content);
+
+    let string_bags = file_content.split("\n\n");
+    let mut int_bags: Vec<Vec<u32>> = vec![];
+
+    for string_bag in string_bags {
+        println!("string_bag: {}", string_bag);
+        let mut int_bag = vec![];
+        let string_snacks = string_bag.split("\n");
+        for string_snack in string_snacks {
+            println!("string_snack: {}", string_snack);
+            let int_snack: u32 = string_snack.parse().unwrap();
+            println!("int_snack: {}", int_snack);
+            int_bag.push(int_snack);
+        }
+        int_bags.push(int_bag);
+    }
+
+    return int_bags;
 }

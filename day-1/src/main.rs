@@ -12,7 +12,9 @@ fn main() {
 
     elf_totals.sort_by(|a, b| b.cmp(a));
     let highest_calorie_bag: u32 = elf_totals[0];
-    println!("highest_calorie_bag: {}", highest_calorie_bag)
+    println!("highest_calorie_bag: {}", highest_calorie_bag);
+    let grand_total = add_totals(vec![elf_totals[0], elf_totals[1], elf_totals[2]]);
+    println!("grand_total: {}", grand_total)
 }
 
 fn get_total_calories(calorie_list: Vec<u32>) -> u32 {
@@ -21,8 +23,15 @@ fn get_total_calories(calorie_list: Vec<u32>) -> u32 {
         println!("calorie_count: {}", calorie_count);
         total += calorie_count;
     }
-
     return total;
+}
+
+fn add_totals(elf_totals: Vec<u32>) -> u32 {
+    let mut grand_total: u32 = 0;
+    for elf_total in elf_totals {
+        grand_total += elf_total;
+    }
+    return grand_total;
 }
 
 fn read_snack_bags() -> Vec<Vec<u32>> {

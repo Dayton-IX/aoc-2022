@@ -37,6 +37,9 @@ fn read_snack_bags() -> Vec<Vec<u32>> {
         let mut int_bag = vec![];
         let string_snacks = string_bag.split("\n");
         for string_snack in string_snacks {
+            if string_snack.len() <= 0 {
+                break;
+            }
             println!("string_snack: {}", string_snack);
             let int_snack: u32 = string_snack.parse().unwrap();
             println!("int_snack: {}", int_snack);

@@ -27,22 +27,18 @@ fn get_total_calories(calorie_list: Vec<u32>) -> u32 {
 
 fn read_snack_bags() -> Vec<Vec<u32>> {
     let file_content = fs::read_to_string("input.txt").expect("Should read the file");
-    println!("file_content: {}", file_content);
 
     let string_bags = file_content.split("\n\n");
     let mut int_bags: Vec<Vec<u32>> = vec![];
 
     for string_bag in string_bags {
-        println!("string_bag: {}", string_bag);
         let mut int_bag = vec![];
         let string_snacks = string_bag.split("\n");
         for string_snack in string_snacks {
             if string_snack.len() <= 0 {
                 break;
             }
-            println!("string_snack: {}", string_snack);
             let int_snack: u32 = string_snack.parse().unwrap();
-            println!("int_snack: {}", int_snack);
             int_bag.push(int_snack);
         }
         int_bags.push(int_bag);

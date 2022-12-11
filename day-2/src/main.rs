@@ -13,39 +13,54 @@ impl Action {
             Action::SCISSORS => 3,
         }
     }
+}
 
-    pub fn opponent_code(&self) -> String {
-        match *self {
-            Action::ROCK => "A".to_string(),
-            Action::PAPER => "A".to_string(),
-            Action::SCISSORS => "C".to_string(),
-        }
-    }
+enum Result {
+    LOSE = 0,
+    TIE = 3,
+    WIN = 6,
 }
 
 struct Round {
     opponent_action: Action,
     player_action: Action,
-    result: u8,
+    opponent_result: Result,
+    player_result: Result,
+    opponenet_points: u8,
+    player_points: u8,
 }
 
 fn main() {
-    calculate_round("B".to_string(), "Z".to_string());
+    calculate_round("B", "Z");
 }
 
-fn calculate_round(encrypted_opponent_action: String, encrypted_player_action: String) -> Round {
+fn calculate_round(encrypted_opponent_action: &str, encrypted_player_action: &str) -> Round {
     let round: Round;
 
-    println!("round.opponent_action: {:?}", round.opponent_action);
-    println!(
-        "round.opponent_action.value(): {:?}",
-        round.opponent_action.value()
-    );
-    println!("round.player_action: {:?}", round.player_action);
-    println!(
-        "round.player_action.value(): {:?}",
-        round.player_action.value()
-    );
-    println!("round.result: {}", round.result);
+    match encrypted_opponent_action {
+        "A" => round.opponent_action = Action::ROCK,
+        "B" => round.opponent_action = Action::PAPER,
+        "C" => round.opponent_action = Action::SCISSORS,
+        _ => panic!("Invalid opponent code"),
+    }
+
+    match encrypted_player_action {
+        "X" => round.player_action = Action::ROCK,
+        "Y" => round.player_action = Action::PAPER,
+        "Z" => round.player_action = Action::SCISSORS,
+        _ => panic!("Invalid player code"),
+    }
+
+    // println!("round.opponent_action: {:?}", round.opponent_action);
+    // println!(
+    //     "round.opponent_action.value(): {:?}",
+    //     round.opponent_action.value()
+    // );
+    // println!("round.player_action: {:?}", round.player_action);
+    // println!(
+    //     "round.player_action.value(): {:?}",
+    //     round.player_action.value()
+    // );
+    // println!("round.result: {}", round.result);
     return round;
 }

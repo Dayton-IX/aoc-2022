@@ -21,13 +21,21 @@ enum Result {
     WIN = 6,
 }
 
+impl Result {
+    pub fn value(&self) -> u8 {
+        match *self {
+            Result::LOSE => 0,
+            Result::TIE => 3,
+            Result::WIN => 6,
+        }
+    }
+}
+
 struct Round {
-    opponent_action: Action,
+    opp_action: Action,
     player_action: Action,
-    opponent_result: Result,
-    player_result: Result,
-    opponenet_points: u8,
-    player_points: u8,
+    result: Result,
+    points: u8,
 }
 
 fn main() {
@@ -35,32 +43,53 @@ fn main() {
 }
 
 fn calculate_round(encrypted_opponent_action: &str, encrypted_player_action: &str) -> Round {
-    let round: Round;
+    let opp_action: Action;
+    let player_action: Action;
+    let result: Result;
+    let points: u8;
 
     match encrypted_opponent_action {
-        "A" => round.opponent_action = Action::ROCK,
-        "B" => round.opponent_action = Action::PAPER,
-        "C" => round.opponent_action = Action::SCISSORS,
+        "A" => opp_action = Action::ROCK,
+        "B" => opp_action = Action::PAPER,
+        "C" => opp_action = Action::SCISSORS,
         _ => panic!("Invalid opponent code"),
     }
 
     match encrypted_player_action {
-        "X" => round.player_action = Action::ROCK,
-        "Y" => round.player_action = Action::PAPER,
-        "Z" => round.player_action = Action::SCISSORS,
+        "X" => player_action = Action::ROCK,
+        "Y" => player_action = Action::PAPER,
+        "Z" => player_action = Action::SCISSORS,
         _ => panic!("Invalid player code"),
     }
 
-    // println!("round.opponent_action: {:?}", round.opponent_action);
-    // println!(
-    //     "round.opponent_action.value(): {:?}",
-    //     round.opponent_action.value()
-    // );
-    // println!("round.player_action: {:?}", round.player_action);
-    // println!(
-    //     "round.player_action.value(): {:?}",
-    //     round.player_action.value()
-    // );
-    // println!("round.result: {}", round.result);
+    if (opp_action.value() == 1 && player_action.value() == 2)
+        || (opp_action.value() == 2 && player_action.value() == 3)
+        || (opp_action.value() == 3 && player_action.value() == 1)
+    {
+        result = Result::WIN;
+    } else if opp_action.value() == player_action.value() {
+        result = Result::TIE;
+    } else {
+        result = Result::LOSE;
+    }
+
+    let round: Round = Round {
+        opp_action,
+        player_action,
+        result: result,
+        points: player_action.value() + result.value(),
+    };
+
+    println!("round.opponent_action: {:?}", round.opp_action);
+    println!(
+        "round.opponent_action.value(): {:?}",
+        round.opp_action.value()
+    );
+    println!("round.player_action: {:?}", round.player_action);
+    println!(
+        "round.player_action.value(): {:?}",
+        round.player_action.value()
+    );
+    println!("round.points: {}", round.points);
     return round;
 }

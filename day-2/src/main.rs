@@ -1,4 +1,4 @@
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 enum Action {
     ROCK = 1,
     PAPER = 2,
@@ -15,6 +15,7 @@ impl Action {
     }
 }
 
+#[derive(Debug, Clone)]
 enum Result {
     LOSE = 0,
     TIE = 3,
@@ -31,6 +32,7 @@ impl Result {
     }
 }
 
+#[derive(Debug)]
 struct Round {
     opp_action: Action,
     player_action: Action,
@@ -39,14 +41,14 @@ struct Round {
 }
 
 fn main() {
-    calculate_round("B", "Z");
+    let player_round: Round = calculate_round("B", "Z");
+    println!("player_round: {:?}", player_round);
 }
 
 fn calculate_round(encrypted_opponent_action: &str, encrypted_player_action: &str) -> Round {
     let opp_action: Action;
     let player_action: Action;
     let result: Result;
-    let points: u8;
 
     match encrypted_opponent_action {
         "A" => opp_action = Action::ROCK,
@@ -75,8 +77,8 @@ fn calculate_round(encrypted_opponent_action: &str, encrypted_player_action: &st
 
     let round: Round = Round {
         opp_action,
-        player_action,
-        result: result,
+        player_action: player_action.clone(),
+        result: result.clone(),
         points: player_action.value() + result.value(),
     };
 
@@ -90,6 +92,8 @@ fn calculate_round(encrypted_opponent_action: &str, encrypted_player_action: &st
         "round.player_action.value(): {:?}",
         round.player_action.value()
     );
+    println!("round.result: {:?}", round.result);
+    println!("round.result.value(): {:?}", round.result.value());
     println!("round.points: {}", round.points);
     return round;
 }

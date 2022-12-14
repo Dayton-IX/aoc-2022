@@ -1,3 +1,5 @@
+use std::fs;
+
 #[derive(Debug, Clone)]
 enum Action {
     ROCK = 1,
@@ -41,8 +43,21 @@ struct Round {
 }
 
 fn main() {
-    let player_round: Round = calculate_round("B", "Z");
+    let player_round: Round = calculate_round("C", "X");
     println!("player_round: {:?}", player_round);
+}
+
+fn read_rounds() -> Vec<&'static str> {
+    let content = fs::read_to_string("input.txt").expect("Should read the file");
+
+    let split_rounds = content.split("\n");
+    let mut coded_rounds: Vec<&str> = vec![];
+
+    for split_round in split_rounds {
+        coded_rounds.push(split_round)
+    }
+
+    return coded_rounds;
 }
 
 fn calculate_round(encrypted_opponent_action: &str, encrypted_player_action: &str) -> Round {

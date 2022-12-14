@@ -8,7 +8,7 @@ enum Action {
 }
 
 impl Action {
-    pub fn value(&self) -> u8 {
+    pub fn value(&self) -> u32 {
         match *self {
             Action::ROCK => 1,
             Action::PAPER => 2,
@@ -25,7 +25,7 @@ enum Result {
 }
 
 impl Result {
-    pub fn value(&self) -> u8 {
+    pub fn value(&self) -> u32 {
         match *self {
             Result::LOSE => 0,
             Result::TIE => 3,
@@ -39,43 +39,66 @@ struct Round {
     opp_action: Action,
     player_action: Action,
     result: Result,
-    points: u8,
+    points: u32,
 }
 
 fn main() {
-    let player_round: Round = calculate_round("C", "X");
-    println!("player_round: {:?}", player_round);
+    let coded_rounds = read_rounds();
+
+    let mut total_points: u32 = 0;
+
+    for coded_round in coded_rounds {
+        println!("coded_round: {}", coded_round);
+        if coded_round.len() != 2 {
+            continue;
+        }
+        let player_round: Round = calculate_round(
+            coded_round.chars().nth(0).unwrap(),
+            coded_round.chars().nth(1).unwrap(),
+        );
+        println!("player_round: {:?}", player_round);
+
+        total_points += player_round.points;
+    }
+
+    println!("total_points: {}", total_points);
 }
 
-fn read_rounds() -> Vec<&'static str> {
+fn read_rounds() -> Vec<String> {
     let content = fs::read_to_string("input.txt").expect("Should read the file");
 
     let split_rounds = content.split("\n");
-    let mut coded_rounds: Vec<&str> = vec![];
+    let mut coded_rounds: Vec<String> = vec![];
 
     for split_round in split_rounds {
-        coded_rounds.push(split_round)
+        println!("split_round: {}", split_round);
+        coded_rounds.push(split_round.split_whitespace().collect())
     }
 
     return coded_rounds;
 }
 
-fn calculate_round(encrypted_opponent_action: &str, encrypted_player_action: &str) -> Round {
+fn calculate_round(encrypted_opponent_action: char, encrypted_player_action: char) -> Round {
     let opp_action: Action;
     let player_action: Action;
     let result: Result;
 
+    println!(
+        "coded actions: {} {}",
+        encrypted_opponent_action, encrypted_player_action
+    );
+
     match encrypted_opponent_action {
-        "A" => opp_action = Action::ROCK,
-        "B" => opp_action = Action::PAPER,
-        "C" => opp_action = Action::SCISSORS,
+        'A' => opp_action = Action::ROCK,
+        'B' => opp_action = Action::PAPER,
+        'C' => opp_action = Action::SCISSORS,
         _ => panic!("Invalid opponent code"),
     }
 
     match encrypted_player_action {
-        "X" => player_action = Action::ROCK,
-        "Y" => player_action = Action::PAPER,
-        "Z" => player_action = Action::SCISSORS,
+        'X' => player_action = Action::ROCK,
+        'Y' => player_action = Action::PAPER,
+        'Z' => player_action = Action::SCISSORS,
         _ => panic!("Invalid player code"),
     }
 

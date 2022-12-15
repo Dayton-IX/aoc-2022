@@ -78,9 +78,20 @@ fn read_rounds() -> Vec<String> {
     return coded_rounds;
 }
 
+fn interpret_player_action(opp_action: Action, encrypted_player_action: char) -> Action {
+    let player_action: Action;
+    if opp_action == Action::SCISSORS {
+        match encrypted_player_action {
+            'X' => player_action = Action::ROCK,
+            'Y' => player_action = Action::PAPER,
+            'Z' => player_action = Action::SCISSORS,
+            _ => panic!("Invalid player code"),
+        }
+    }
+}
+
 fn calculate_round(encrypted_opponent_action: char, encrypted_player_action: char) -> Round {
     let opp_action: Action;
-    let player_action: Action;
     let result: Result;
 
     println!(
@@ -95,12 +106,7 @@ fn calculate_round(encrypted_opponent_action: char, encrypted_player_action: cha
         _ => panic!("Invalid opponent code"),
     }
 
-    match encrypted_player_action {
-        'X' => player_action = Action::ROCK,
-        'Y' => player_action = Action::PAPER,
-        'Z' => player_action = Action::SCISSORS,
-        _ => panic!("Invalid player code"),
-    }
+    let player_action = interpret_player_action(opp_action, encrypted_player_action);
 
     if (opp_action.value() == 1 && player_action.value() == 2)
         || (opp_action.value() == 2 && player_action.value() == 3)

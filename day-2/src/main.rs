@@ -72,22 +72,40 @@ fn read_rounds() -> Vec<String> {
 
     for split_round in split_rounds {
         println!("split_round: {}", split_round);
-        coded_rounds.push(split_round.split_whitespace().collect())
+        coded_rounds.push(split_round.split_whitespace().collect());
     }
 
     return coded_rounds;
 }
 
-fn interpret_player_action(opp_action: Action, encrypted_player_action: char) -> Action {
+fn interpret_player_action(opp_action: &Action, encrypted_player_action: char) -> Action {
     let player_action: Action;
-    if opp_action == Action::SCISSORS {
+    if opp_action.value() == 1 {
+        match encrypted_player_action {
+            'X' => player_action = Action::SCISSORS,
+            'Y' => player_action = Action::ROCK,
+            'Z' => player_action = Action::PAPER,
+            _ => panic!("Invalid player code"),
+        }
+    } else if opp_action.value() == 2 {
         match encrypted_player_action {
             'X' => player_action = Action::ROCK,
             'Y' => player_action = Action::PAPER,
             'Z' => player_action = Action::SCISSORS,
             _ => panic!("Invalid player code"),
         }
+    } else if opp_action.value() == 3 {
+        match encrypted_player_action {
+            'X' => player_action = Action::PAPER,
+            'Y' => player_action = Action::SCISSORS,
+            'Z' => player_action = Action::ROCK,
+            _ => panic!("Invalid player code"),
+        }
+    } else {
+        panic!("Invalid opponent action");
     }
+
+    return player_action;
 }
 
 fn calculate_round(encrypted_opponent_action: char, encrypted_player_action: char) -> Round {
@@ -106,7 +124,7 @@ fn calculate_round(encrypted_opponent_action: char, encrypted_player_action: cha
         _ => panic!("Invalid opponent code"),
     }
 
-    let player_action = interpret_player_action(opp_action, encrypted_player_action);
+    let player_action = interpret_player_action(&opp_action, encrypted_player_action);
 
     if (opp_action.value() == 1 && player_action.value() == 2)
         || (opp_action.value() == 2 && player_action.value() == 3)
